@@ -1,4 +1,4 @@
-# Ejercicio 1 - Tarjetas CRC
+# Ejercicio 1
 
 ## 1. Tarjetas CRC
 
@@ -8,8 +8,8 @@
 |---|---|
 | **Responsabilidades** | **Colaboradores** |
 | Conocer su título, autor e ISBN | — |
-| Conocer el número de ejemplares disponibles | — |
-| Prestar un ejemplar (si hay disponibles) | `Préstamo` |
+| Conocer cuántos ejemplares tiene disponibles | — |
+| Prestar un ejemplar | `Préstamo` |
 | Recibir la devolución de un ejemplar | `Préstamo` |
 
 ### Tarjeta CRC: `Socio`
@@ -18,35 +18,31 @@
 |---|---|
 | **Responsabilidades** | **Colaboradores** |
 | Conocer su nombre, número de socio y fecha de alta | — |
-| Solicitar el préstamo de un libro | `Libro`, `Préstamo` |
-| Devolver un libro prestado | `Préstamo` |
+| Pedir un libro prestado | `Libro`, `Préstamo` |
+| Devolver un libro | `Préstamo` |
 
 ### Tarjeta CRC: `Préstamo`
 
 | Clase: Préstamo | |
 |---|---|
 | **Responsabilidades** | **Colaboradores** |
-| Conocer qué libro y qué socio están implicados | `Libro`, `Socio` |
-| Conocer la fecha de inicio del préstamo | — |
-| Comprobar si el libro tiene ejemplares antes de prestarlo | `Libro` |
-| Registrar la devolución del préstamo | `Libro` |
+| Saber qué socio tiene qué libro | `Libro`, `Socio` |
+| Saber la fecha del préstamo | — |
+| Registrar la devolución | `Libro` |
 
-## 2. Prestar un ejemplar en `Libro`
+## 2. Prestar un ejemplar
 
-Primero el libro mira si tiene ejemplares disponibles (más de 0).
-
-- Si tiene, se presta y los ejemplares bajan en 1.
-- Si no tiene, no se presta y el libro se queda igual.
-
-Los ejemplares nunca pueden ser negativos.
+1. El libro mira si tiene ejemplares disponibles.
+2. Si tiene, se presta y tiene un ejemplar menos.
+3. Si no tiene, no se presta y el libro se queda igual.
 
 ## 3. Flujo
 
-1. Se crea un libro con 3 ejemplares. Lo hace la clase `Libro`, no necesita a nadie más.
-2. Se crean dos socios. Lo hace la clase `Socio`, tampoco necesita colaboradores.
-3. El socio 1 pide el libro. `Socio` usa `Préstamo`, y `Préstamo` le pregunta a `Libro` si hay ejemplares. Hay 3, así que sí se lo lleva. Quedan 2.
-4. El socio 2 pide el mismo libro. Pasa lo mismo: hay 2, así que también se lo lleva. Queda 1.
-5. El socio 1 devuelve el libro. El `Préstamo` se termina y avisa a `Libro`, que suma 1. Quedan 2.
-6. El socio 2 lo vuelve a pedir. Hay 2, así que sí puede. Queda 1.
+1. Se crea un libro con 3 ejemplares (`Libro`).
+2. Se crean dos socios (`Socio`).
+3. El socio 1 pide el libro: sí puede. Quedan 2.
+4. El socio 2 pide el libro: sí puede. Queda 1.
+5. El socio 1 devuelve el libro. Quedan 2.
+6. El socio 2 lo vuelve a pedir: sí puede. Queda 1.
 
-Como el libro tiene 3 ejemplares, todos los préstamos salen bien. Si solo tuviera 1, el socio 2 no podría cogerlo en el paso 4, pero en el paso 6 sí, porque el socio 1 ya lo habría devuelto.
+En los pasos 3, 4 y 6 actúa `Socio`, que usa `Préstamo`, y `Préstamo` le pregunta a `Libro` si hay ejemplares. En el paso 5, `Préstamo` avisa a `Libro` para que sume un ejemplar.
